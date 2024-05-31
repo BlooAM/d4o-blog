@@ -30,6 +30,7 @@ def post_share(request, post_id):
         form = EmailPostForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-        else:
-            form = EmailPostForm()
-        return render(request, 'blog/post/share.html', {'post': post, 'form': form})
+    else:
+        form = EmailPostForm()
+
+    return render(request, 'blog/post/share.html', {'post': post, 'form': form})
