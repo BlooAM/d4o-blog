@@ -36,7 +36,9 @@ def post_share(request, post_id):
             subject = f'{cd["name"]} recommends you reading {post.title}'
             message = f'Read {post.title}. You can find it here: {post_url}\n' \
                       f'Comments {cd["name"]}: {cd["comment"]}'
+            send_mail(subject, message, 'admin@d4o_blog.com', [cd['to']])  # TODO: admin account as env var
+            sent = True
     else:
         form = EmailPostForm()
 
-    return render(request, 'blog/post/share.html', {'post': post, 'form': form})
+    return render(request, 'blog/post/share.html', {'post': post, 'form': form, 'sent': sent})
