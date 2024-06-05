@@ -35,7 +35,7 @@ def post_share(request, post_id):
             post_url = request.build_absolute_uri(post.get_absolute_url())
             subject = f'{cd["name"]} recommends you reading {post.title}'
             message = f'Read {post.title}. You can find it here: {post_url}\n' \
-                      f'Comments {cd["name"]}: {cd["comment"]}'
+                      f'Comments {cd["name"]}: {cd["comments"]}'
             send_mail(subject, message, 'admin@d4o_blog.com', [cd['to']])  # TODO: admin account as env var
             sent = True
     else:
