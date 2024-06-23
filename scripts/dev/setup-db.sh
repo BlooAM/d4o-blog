@@ -1,3 +1,3 @@
 source scripts/dev/.settings
-docker pull postgres
-docker run --name postgres-dev -e POSTGRES_DEV_PASSWORD="$POSTGRES_DEV_PASSWORD" -d postgres
+docker pull postgres:16.0
+docker run --name postgres-dev -e POSTGRES_HOST_AUTH_METHOD=trust -d postgres:16.0
