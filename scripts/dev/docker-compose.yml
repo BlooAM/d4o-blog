@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  postgresql:
+    image: postgres
+    container_name: postgres_dev
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_DEV_PASSWORD}
+      POSTGRES_ROOT_PASSWORD: ${POSTGRES_DEV_PASSWORD}
+    ports:
+      - ${POSTGRES_PORT}:5432
+    volumes:
+        - ./postgresql:/docker-entrypoint-initdb.d
