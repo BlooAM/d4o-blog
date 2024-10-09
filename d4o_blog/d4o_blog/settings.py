@@ -84,15 +84,20 @@ POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
 POSTGRES_HOST = os.getenv('POSTGRES_HOST')
 POSTGRES_PORT = os.getenv('POSTGRES_PORT')
 DATABASES = {
-    'default': {
+    'sqlite': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'postgresql': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'blog',
         'HOST': f'{POSTGRES_HOST}',
         'PORT': f'{POSTGRES_PORT}',
         'USER': f'{POSTGRES_USER}',
         'PASSWORD': f'{POSTGRES_PASSWORD}',
-    },
+    }
 }
+DATABASES['default'] = DATABASES['sqlite']
 
 
 
