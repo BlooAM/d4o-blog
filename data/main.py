@@ -49,4 +49,4 @@ if sources:
             sample_data_dir = CURR_DIR / 'tests' / 'static'
             sample_data_path = sample_data_dir / 'sample_article_responses.json'
             with open(sample_data_path, 'r') as fp:
-                article_reponses = json.load(fp)
+                article_responses = json.load(fp)
