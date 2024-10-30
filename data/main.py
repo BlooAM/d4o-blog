@@ -12,6 +12,7 @@ load_dotenv()
 client = NewsApiClient(api_key=os.getenv('NEWSAPI_KEY'))
 CURR_DIR = Path(__file__).parent
 SOURCES_LIMIT: int = 2
+FETCH_LOCAL_SOURCES = True
 TApiReponse = dict[str, str | list[str]]
 
 
@@ -28,18 +29,24 @@ def _parse_response(response: TApiReponse) -> list[TApiReponse] | None:
             return articles
 
 
-try:
+if FETCH_LOCAL_SOURCES:
     sources_response = client.get_sources()
     sources: list[TApiReponse] = sources_response.get('sources')
-except NewsAPIException as e:
+else:
     sample_data_dir = CURR_DIR / 'tests' / 'static'
     sample_data_path = sample_data_dir / 'sample_sources.json'
     with open(sample_data_path, 'r') as fp:
         sources = json.load(fp)
 
 
+article_responses: list[TApiReponse] = []
 if sources:
-    article_responses: list[TApiReponse] = [
-        client.get_everything(sources=source['id']) for source in sources[:SOURCES_LIMIT]
-    ]
-    article_response = article_responses[0]
+    for source in sources:
+        try:
+            article_response = client.get_everything(sources=source['id'])
+            article_responses.append(article_response)
+        except NewsAPIException as e:
+            sample_data_dir = CURR_DIR / 'tests' / 'static'
+            sample_data_path = sample_data_dir / 'sample_article_responses.json'
+            with open(sample_data_path, 'r') as fp:
+                article_reponses = json.load(fp)
