@@ -29,24 +29,27 @@ def _parse_response(response: TApiReponse) -> list[TApiReponse] | None:
             return articles
 
 
-if FETCH_LOCAL_SOURCES:
-    sources_response = client.get_sources()
-    sources: list[TApiReponse] = sources_response.get('sources')
-else:
-    sample_data_dir = CURR_DIR / 'tests' / 'static'
-    sample_data_path = sample_data_dir / 'sample_sources.json'
-    with open(sample_data_path, 'r') as fp:
-        sources = json.load(fp)
+def fetch_sources(fetch_local_sources: bool = False) -> TApiReponse:
+    if fetch_local_sources:
+        sample_data_dir = CURR_DIR / 'tests' / 'static'
+        sample_data_path = sample_data_dir / 'sample_sources.json'
+        with open(sample_data_path, 'r') as fp:
+            sources = json.load(fp)
+    else:
+        sources_response = client.get_sources()
+        sources: list[TApiReponse] = sources_response.get('sources')
+
+    return sources
 
 
+sources: TApiReponse = fetch_sources(fetch_local_sources=FETCH_LOCAL_SOURCES)
 article_responses: list[TApiReponse] = []
-if sources:
-    for source in sources:
-        try:
-            article_response = client.get_everything(sources=source['id'])
-            article_responses.append(article_response)
-        except NewsAPIException as e:
-            sample_data_dir = CURR_DIR / 'tests' / 'static'
-            sample_data_path = sample_data_dir / 'sample_article_responses.json'
-            with open(sample_data_path, 'r') as fp:
-                article_reponses = json.load(fp)
+for source in sources:
+    try:
+        article_response = client.get_everything(sources=source['id'])
+        article_responses.append(article_response)
+    except NewsAPIException as e:
+        sample_data_dir = CURR_DIR / 'tests' / 'static'
+        sample_data_path = sample_data_dir / 'sample_articles_response.json'
+        with open(sample_data_path, 'r') as fp:
+            article_responses = json.load(fp)
