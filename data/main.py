@@ -1,6 +1,7 @@
 import os
 
 from dotenv import load_dotenv
+import inflection
 from newsapi import NewsApiClient
 
 
@@ -29,3 +30,4 @@ if sources:
     article_responses: list[TApiReponse] = [
         client.get_everything(sources=source['id']) for source in sources[:SOURCES_LIMIT]
     ]
+    article_response = article_responses[0]
