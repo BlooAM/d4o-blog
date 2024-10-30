@@ -4,3 +4,5 @@ markdown~=3.4.1
 psycopg2-binary~=2.9.3
 python-dotenv
 newsapi~=0.2.7
+pydantic~=2.9.2
+inflection~=0.5.1
