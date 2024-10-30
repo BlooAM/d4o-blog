@@ -1,6 +1,4 @@
-import random
 import os
-import typing as t
 
 from dotenv import load_dotenv
 from newsapi import NewsApiClient
@@ -12,13 +10,22 @@ SOURCES_LIMIT: int = 10
 TApiReponse = dict[str, str | list[str]]
 
 
-def _parse_response(response: TApiReponse):
-    pass
+def _parse_response(response: TApiReponse) -> list[TApiReponse] | None:
+    status = response.get('status')
+    if not status or status != 'ok':
+        return
+    else:
+        articles = response.get('articles')
+        if not articles:
+            return
+        else:
+            articles.pop('content')
+            return articles
 
 
 sources_response = client.get_sources()
 sources: list[TApiReponse] = sources_response.get('sources')
 if sources:
     article_responses: list[TApiReponse] = [
-        client.get_everything(sources=source['id']) for source in random.suffle(sources)[:SOURCES_LIMIT]
+        client.get_everything(sources=source['id']) for source in sources[:SOURCES_LIMIT]
     ]
