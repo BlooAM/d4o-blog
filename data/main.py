@@ -16,6 +16,14 @@ FETCH_LOCAL_SOURCES = True
 TApiReponse = dict[str, str | list[str]]
 
 
+def _get_test_static_resource(resource_name: str) -> list[TApiReponse]:
+    sample_data_dir = CURR_DIR / 'tests' / 'static'
+    sample_data_path = sample_data_dir / f'{resource_name}.json'
+    with open(sample_data_path, 'r') as fp:
+        resource = json.load(fp)
+    return  resource
+
+
 def _parse_response(response: TApiReponse) -> list[TApiReponse] | None:
     status = response.get('status')
     if not status or status != 'ok':
@@ -31,10 +39,7 @@ def _parse_response(response: TApiReponse) -> list[TApiReponse] | None:
 
 def fetch_sources(fetch_local_sources: bool = False) -> TApiReponse:
     if fetch_local_sources:
-        sample_data_dir = CURR_DIR / 'tests' / 'static'
-        sample_data_path = sample_data_dir / 'sample_sources.json'
-        with open(sample_data_path, 'r') as fp:
-            sources = json.load(fp)
+        sources = _get_test_static_resource(resource_name='sample_sources')
     else:
         sources_response = client.get_sources()
         sources: list[TApiReponse] = sources_response.get('sources')
@@ -49,7 +54,4 @@ for source in sources:
         article_response = client.get_everything(sources=source['id'])
         article_responses.append(article_response)
     except NewsAPIException as e:
-        sample_data_dir = CURR_DIR / 'tests' / 'static'
-        sample_data_path = sample_data_dir / 'sample_articles_response.json'
-        with open(sample_data_path, 'r') as fp:
-            article_responses = json.load(fp)
+        article_responses = _get_test_static_resource(resource_name='sample_articles_response')
