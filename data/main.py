@@ -10,8 +10,8 @@ from pathlib import Path
 
 load_dotenv()
 client = NewsApiClient(api_key=os.getenv('NEWSAPI_KEY'))
-CURR_DIR = Path(__file__)
-SOURCES_LIMIT: int = 10
+CURR_DIR = Path(__file__).parent
+SOURCES_LIMIT: int = 2
 TApiReponse = dict[str, str | list[str]]
 
 
