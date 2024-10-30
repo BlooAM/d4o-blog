@@ -30,13 +30,13 @@ def _parse_response(response: TApiReponse) -> list[TApiReponse] | None:
 
 
 if FETCH_LOCAL_SOURCES:
-    sources_response = client.get_sources()
-    sources: list[TApiReponse] = sources_response.get('sources')
-else:
     sample_data_dir = CURR_DIR / 'tests' / 'static'
     sample_data_path = sample_data_dir / 'sample_sources.json'
     with open(sample_data_path, 'r') as fp:
         sources = json.load(fp)
+else:
+    sources_response = client.get_sources()
+    sources: list[TApiReponse] = sources_response.get('sources')
 
 
 article_responses: list[TApiReponse] = []
@@ -47,6 +47,6 @@ if sources:
             article_responses.append(article_response)
         except NewsAPIException as e:
             sample_data_dir = CURR_DIR / 'tests' / 'static'
-            sample_data_path = sample_data_dir / 'sample_article_responses.json'
+            sample_data_path = sample_data_dir / 'sample_articles_response.json'
             with open(sample_data_path, 'r') as fp:
                 article_responses = json.load(fp)
