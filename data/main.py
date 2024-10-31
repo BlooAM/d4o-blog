@@ -37,7 +37,7 @@ def _parse_response(response: TApiReponse) -> list[TApiReponse] | None:
             return articles
 
 
-def fetch_sources(fetch_local_sources: bool = False) -> TApiReponse:
+def fetch_sources(fetch_local_sources: bool = False) -> list[TApiReponse]:
     if fetch_local_sources:
         sources = _get_test_static_resource(resource_name='sample_sources')
     else:
