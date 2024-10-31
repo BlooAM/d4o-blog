@@ -27,6 +27,15 @@ def _get_test_static_resource(resource_name: str) -> list[TApiReponse]:
     return resource
 
 
+def _parse_article(article: dict[str: str | dict]) -> Article:
+    article_components = {
+        inflection.underscore(article_entity): article.get(article_entity)
+        for article_entity in article.keys()
+    }
+    article_parsed = Article(**article_components)
+    return article_parsed
+
+
 def _parse_response(response: TApiReponse) -> list[Article] | None:
     status = response.get('status')
     if not status or status != 'ok':
@@ -35,16 +44,11 @@ def _parse_response(response: TApiReponse) -> list[Article] | None:
         articles = response.get('articles')
         parsed_articles = []
         for article in articles:
-            article_components = {
-                inflection.underscore(article_entity): article.get(article_entity)
-                for article_entity in article.keys()
-            }
             try:
-                article_parsed = Article(**article_components)
+                parsed_article = _parse_article(article)
+                parsed_articles.append(parsed_article)
             except PydanticValidationError as e:
                 print(f'Article could`t be parsed with the following exception: {e}')
-                continue
-            parsed_articles.append(article_parsed)
 
         return parsed_articles
 
