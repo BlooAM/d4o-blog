@@ -30,11 +30,12 @@ def _parse_response(response: TApiReponse) -> list[TApiReponse] | None:
         return
     else:
         articles = response.get('articles')
-        if not articles:
-            return
-        else:
-            articles.pop('content')
-            return articles
+        for article in articles:
+            article_normalized = {
+                inflection.underscore(article_entity): article.get(article_entity)
+                for article_entity in article.keys()
+            }
+
 
 
 def fetch_sources(fetch_local_sources: bool = False) -> list[TApiReponse]:
