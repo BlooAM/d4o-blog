@@ -8,7 +8,7 @@ from newsapi.newsapi_exception import NewsAPIException
 from pathlib import Path
 from pydantic_core._pydantic_core import ValidationError as PydanticValidationError
 
-from .models import Article
+from models import Article
 
 
 load_dotenv()
@@ -42,7 +42,7 @@ def _parse_response(response: TApiReponse) -> list[Article] | None:
             try:
                 article_parsed = Article(**article_components)
             except PydanticValidationError as e:
-                print(f'Article couln`t be parsed with the following exception: {e}')
+                print(f'Article could`t be parsed with the following exception: {e}')
                 continue
             parsed_articles.append(article_parsed)
 
@@ -67,3 +67,5 @@ for source in sources:
         article_responses.append(article_response)
     except NewsAPIException as e:
         article_responses = _get_test_static_resource(resource_name='sample_articles_response')
+
+    parsed_articles = _parse_response(article_responses)
