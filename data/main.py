@@ -88,4 +88,4 @@ def main(save_results: bool = False):
 
 
 if __name__ == '__main__':
-    main(save_results=True)
+    results = main(save_results=True)
