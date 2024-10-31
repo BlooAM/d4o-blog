@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class Article(BaseModel):
-    source: str
+    source: dict[str, str]
     author: str
     title: str
     description: str
