@@ -6,6 +6,9 @@ import inflection
 from newsapi import NewsApiClient
 from newsapi.newsapi_exception import NewsAPIException
 from pathlib import Path
+from pydantic_core._pydantic_core import ValidationError as PydanticValidationError
+
+from .models import Article
 
 
 load_dotenv()
@@ -21,21 +24,29 @@ def _get_test_static_resource(resource_name: str) -> list[TApiReponse]:
     sample_data_path = sample_data_dir / f'{resource_name}.json'
     with open(sample_data_path, 'r') as fp:
         resource = json.load(fp)
-    return  resource
+    return resource
 
 
-def _parse_response(response: TApiReponse) -> list[TApiReponse] | None:
+def _parse_response(response: TApiReponse) -> list[Article] | None:
     status = response.get('status')
     if not status or status != 'ok':
         return
     else:
         articles = response.get('articles')
+        parsed_articles = []
         for article in articles:
-            article_normalized = {
+            article_components = {
                 inflection.underscore(article_entity): article.get(article_entity)
                 for article_entity in article.keys()
             }
+            try:
+                article_parsed = Article(**article_components)
+            except PydanticValidationError as e:
+                print(f'Article couln`t be parsed with the following exception: {e}')
+                continue
+            parsed_articles.append(article_parsed)
 
+        return parsed_articles
 
 
 def fetch_sources(fetch_local_sources: bool = False) -> list[TApiReponse]:
