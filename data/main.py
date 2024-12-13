@@ -71,7 +71,7 @@ def dump_data(articles: list[Article]) -> None:
         json.dump(fp, data_objects)
 
 
-def main(save_results: bool = False):
+def fetch_articles(save_results: bool = False):
     sources: TApiReponse = fetch_sources(fetch_local_sources=FETCH_LOCAL_SOURCES)
     article_responses: list[TApiReponse] = []
     for source in sources:
@@ -88,4 +88,4 @@ def main(save_results: bool = False):
 
 
 if __name__ == '__main__':
-    results = main(save_results=True)
+    results = fetch_articles(save_results=True)
