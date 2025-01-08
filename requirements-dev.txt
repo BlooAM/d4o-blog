@@ -1,3 +1,0 @@
-pip install -r requirements.txt
-Faker~=20.0.3
-faker-blog-provider~=0.0.3
